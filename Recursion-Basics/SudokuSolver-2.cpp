@@ -8,6 +8,29 @@ using namespace std;
 //checking 3*3 set for duplicate values
 //Time complexity
 
+int getNextAvailblePos(int Board[9][9], int* availRow, int* availCol){
+
+	
+	for(int i = 0; i < 9;i++){
+	
+		for(int j = 0; j < 9; j++){
+
+			
+			if(Board[i][j] == 0)//Available
+			{
+			
+			    *availRow = i;
+			    *availCol = j;
+			    return 0;
+			    //return i,j;	
+			
+			}
+		}
+	}
+
+	return 1;	
+}
+
 
 bool canInsertNumAtPosXY(int Board[9][9], int num, int row, int col){
 
@@ -15,13 +38,9 @@ bool canInsertNumAtPosXY(int Board[9][9], int num, int row, int col){
 	//Check all values != -1 ===>  Board[row][y..0 to 8]
 	for(int i = 0; i < 9; i++){
 	
-		if(Board[row][i] != 0){
 			if(Board[row][i] == num) return false;
-		}
 
-		if(Board[i][col] != 0){
 			if(Board[i][col] == num) return false;
-		}
 	
 	}	
 	//check in the 3*3 set
@@ -62,23 +81,28 @@ void PrintBoard(int Board[9][9], int d){
 }
 
 
-bool solveSudoku(int Board[9][9],int x, int y){
+bool solveSudoku(int Board[9][9]){
 
 
-	if(y == 9){//go to next row
+	//if(y == 9){//go to next row
 	
-	     return solveSudoku(Board,x+1,0);
+//	     return solveSudoku(Board,x+1,0);
 
-	}
+//	}
 
-	if(x == 9){
+//	if(x == 9){
 	     //processed entire board
-	     return true;
-	}
+//	     return true;
+//	}
 
 	//To find empty cell
-	if(Board[x][y] != 0)
-		return solveSudoku(Board,x,y+1);
+	//if(Board[x][y] != 0)
+	//	return solveSudoku(Board,x,y+1);
+
+	int x = 0;
+	int y = 0;
+	if(getNextAvailblePos(Board,&x, &y))  //Used as BASE CONDITION
+		return true;
 
 
 	for(int num = 1; num <= 9; num++){
@@ -88,7 +112,7 @@ bool solveSudoku(int Board[9][9],int x, int y){
 
 			//Rest of the board will be filled by recursion
 			Board[x][y] = num;
-			if(solveSudoku(Board,x,y))
+			if(solveSudoku(Board))
 				return true;
 			else
 				Board[x][y] = 0;
@@ -124,7 +148,7 @@ int main(){
 	PrintBoard(Board,9);
 
 	
-	if(solveSudoku(Board,0,0))
+	if(solveSudoku(Board))
 		PrintBoard(Board,9);
 	else
 		cout << "Failure" << endl;
